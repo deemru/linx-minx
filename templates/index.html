@@ -1,0 +1,47 @@
+{{define "head"}}
+    <link href='{{.sitepath}}static/css/linx-minx-upload.css' rel='stylesheet' type='text/css'>
+{{end}}
+
+{{define "content"}}
+<main class="cp-main cp-main_screen cp-main_center">
+    <div class="cp-content-block">
+        <div id="fileupload">
+            <form action="{{.sitepath}}upload" class="dropzone" id="dropzone" method="POST"
+                  enctype="multipart/form-data"
+                  data-maxsize="{{.maxsize}}" data-auth="none">
+                <div class="fallback">
+                    <p>Your browser is outdated and does not support modern standards, the page is displayed in limited mode</p>
+                    <input id="fileinput" name="file" type="file"/><br/>
+                    <input id="submitbtn" type="submit" value="Upload">
+                </div>
+                <div id="dzone" class="dz-default dz-message">
+                    <span>Drop file here <br>or paste image</span>
+                </div>
+                <div id="choices">
+                    <div id="expiry">
+                        <div class="expiry-buttons">
+                            {{range .expirylist}}
+                            <button type="button" class="expiry-btn" data-value="{{.Seconds}}" {{if eq .Seconds 86400}}data-default="true"{{end}}>{{.Human}}</button>
+                            {{end}}
+                        </div>
+                        <select name="expires" id="expires" style="display: none;">
+                            {{range .expirylist}}
+                            <option value="{{.Seconds}}" {{if eq .Seconds 86400}}selected{{end}}>{{.Human}}</option>
+                            {{end}}
+                        </select>
+                    </div>
+                </div>
+            </form>
+            <div id="uploads"></div>
+        </div>
+    </div>
+    <script src="{{.sitepath}}static/js/dropzone.js"></script>
+    <script src="{{.sitepath}}static/js/upload.js"></script>
+    <script src="{{.sitepath}}static/js/storage.js"></script>
+    <script src="{{.sitepath}}static/js/expiry-buttons.js"></script>
+</main>
+{{end}}
+
+{{define "templates/index.html"}}
+{{template "templates/linx-minx.html" .}}
+{{end}}
