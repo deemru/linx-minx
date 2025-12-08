@@ -5,15 +5,17 @@
 {{define "content"}}
 <main class="cp-main cp-main_screen cp-main_center">
     <div class="cp-content-block">
-        <div style="text-align: center; overflow-wrap: anywhere; padding: 20px;">
-            <p style="margin-bottom: 20px; font-weight: 700; word-break: break-all; font-size: 20px; line-height: 1.8;">
-                <a id="download-link" style="color: #0055a2; text-decoration: underline;" href="{{.sitepath}}{{.download}}">{{.filename}}</a> <span style="color: #666; font-weight: normal;">({{.size}})</span>
+        <div class="file-display-container">
+            <p class="file-display-name">
+                <a id="download-link" href="{{.sitepath}}{{.download}}">{{.filename}}</a>
             </p>
-            <div style="margin-top: 20px;">
-                <button class="copy-btn">Copy</button>
+            <p class="file-display-size">{{.size}}</p>
+            <div class="file-display-actions">
+                <a href="{{.sitepath}}{{.download}}" class="download-btn">Download</a>
+                <button class="copy-btn">Copy Link</button>
             </div>
             {{if ne .expiry "never expires"}}
-            <p style="font-size: 18px; color: #666; margin-top: 20px; line-height: 1.8;">Link is valid for {{.expiry}}</p>
+            <p class="file-display-expiry">Link is valid for {{.expiry}}</p>
             {{end}}
         </div>
     </div>

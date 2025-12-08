@@ -1,6 +1,7 @@
 #fileupload {
     width: 100%;
     text-align: center;
+    box-sizing: border-box;
 }
 
 #dzone {
@@ -28,7 +29,7 @@
 
 #expiry {
     margin: 10px 0;
-    display: inline-block;
+    display: block;
 }
 
 #expires {
@@ -38,7 +39,8 @@
 .expiry-buttons {
     display: flex;
     gap: 8px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    width: 100%;
 }
 
 .expiry-btn {
@@ -51,19 +53,17 @@
     cursor: pointer;
     transition: all 0.2s;
     white-space: nowrap;
-    min-width: 120px;
-    text-decoration: none;
-    display: inline-block;
+    flex: 1 1 0;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    outline: none;
 }
 
 .expiry-btn:hover {
     background-color: #f5f5f5;
 }
 
-.expiry-btn:focus {
-    outline: 2px solid #0055a2;
-    outline-offset: 2px;
-}
 
 .expiry-btn.active {
     background-color: #0055a2;
@@ -86,12 +86,16 @@ div.upload {
     border-left: 4px solid #0055a2;
     margin-bottom: 10px;
     padding: 15px 15px 15px 20px;
-    max-width: 100%;
+    width: 100%;
     font-size: 18px;
-    word-break: break-all;
     color: #333;
     text-align: left;
     position: relative;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 10px;
+    overflow: hidden;
 }
 
 div.upload:hover {
@@ -110,8 +114,11 @@ div.upload.strikethrough::after {
 }
 
 div.upload span {
-    max-width: 100%;
-    word-break: break-all;
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 div.upload a {
@@ -119,6 +126,12 @@ div.upload a {
     font-weight: bold;
     color: #0055a2;
     font-size: 18px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
+    min-width: 0;
 }
 
 div.upload a:hover {
@@ -131,9 +144,19 @@ div.upload .deleted {
 }
 
 div.upload .right {
-    float: right;
+    flex: 0 0 auto;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 8px;
     padding-left: 10px;
     text-align: right;
+    white-space: nowrap;
+}
+
+div.upload .right > * {
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 div.upload .cancel {
@@ -147,6 +170,8 @@ div.upload .cancel {
     vertical-align: middle;
     text-align: center;
     min-width: 20px;
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 div.upload .cancel:hover {
@@ -164,6 +189,12 @@ div.upload .cancel.disabled {
 div.upload .cancel.disabled:hover {
     color: #0055a2;
     background-color: transparent;
+}
+
+div.upload .expiry,
+div.upload .file-size {
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 div.upload .expiry {
@@ -214,8 +245,8 @@ div.upload .file-size {
 
 @media screen and (max-width: 480px) {
     div.upload {
-        display: block;
-        min-height: auto;
+        gap: 6px;
+        padding: 12px 10px 12px 15px;
     }
 
     #choices {
@@ -224,11 +255,38 @@ div.upload .file-size {
 
     .expiry-buttons {
         justify-content: center;
+        gap: 4px;
     }
 
     .expiry-btn {
-        flex: 1;
-        min-width: 0;
+        padding: 10px 4px;
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .expiry-buttons {
+        gap: 2px;
+    }
+
+    .expiry-btn {
+        padding: 8px 2px;
+        font-size: 12px;
+    }
+
+    div.upload {
+        gap: 4px;
+        padding: 10px 8px 10px 12px;
+        font-size: 16px;
+    }
+
+    div.upload a {
+        font-size: 16px;
+    }
+
+    div.upload .cancel {
+        font-size: 18px;
+        padding: 2px 4px;
     }
 }
 
