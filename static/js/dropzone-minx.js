@@ -477,6 +477,8 @@ function (_Emitter) {
           element.addEventListener(event, handler, false);
         }
       });
+
+      this.options.init.call(this);
     }
   }, {
     key: "drop",

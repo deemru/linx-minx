@@ -2,6 +2,12 @@ Dropzone.options.dropzone = {
     init: function () {
         var dzone = document.getElementById("dzone");
         dzone.style.display = "block";
+
+        document.addEventListener("dragover", function(e) { e.preventDefault(); });
+        document.addEventListener("drop", function(e) {
+            e.preventDefault();
+            this.drop(e);
+        }.bind(this));
     },
     addedfile: function (file) {
         var index = parseInt(localStorage.getItem("linx-minx-file-index") || "0");
