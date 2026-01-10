@@ -40,6 +40,31 @@ jobs:
           GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o release/linx-minx-${{ github.ref_name }}-darwin-amd64 .
           GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -o release/linx-minx-${{ github.ref_name }}-darwin-arm64 .
 
+      - name: Build DEB packages
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+
+          # amd64
+          mkdir -p deb-amd64/DEBIAN deb-amd64/usr/bin
+          cp debian/DEBIAN/* deb-amd64/DEBIAN/
+          sed -i "s/^Version:.*/Version: $VERSION/" deb-amd64/DEBIAN/control
+          sed -i "s/^Architecture:.*/Architecture: amd64/" deb-amd64/DEBIAN/control
+          cp release/linx-minx-${{ github.ref_name }}-linux-amd64 deb-amd64/usr/bin/linx-minx
+          chmod 755 deb-amd64/usr/bin/linx-minx
+          chmod 755 deb-amd64/DEBIAN/postinst deb-amd64/DEBIAN/prerm deb-amd64/DEBIAN/postrm
+          dpkg-deb --build deb-amd64 release/linx-minx_${VERSION}_amd64.deb
+
+          # arm64
+          mkdir -p deb-arm64/DEBIAN deb-arm64/usr/bin
+          cp debian/DEBIAN/* deb-arm64/DEBIAN/
+          sed -i "s/^Version:.*/Version: $VERSION/" deb-arm64/DEBIAN/control
+          sed -i "s/^Architecture:.*/Architecture: arm64/" deb-arm64/DEBIAN/control
+          cp release/linx-minx-${{ github.ref_name }}-linux-arm64 deb-arm64/usr/bin/linx-minx
+          chmod 755 deb-arm64/usr/bin/linx-minx
+          chmod 755 deb-arm64/DEBIAN/postinst deb-arm64/DEBIAN/prerm deb-arm64/DEBIAN/postrm
+          dpkg-deb --build deb-arm64 release/linx-minx_${VERSION}_arm64.deb
+
       - name: Publish
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2

@@ -1,4 +1,4 @@
-# linx-minx
+# Linx-Minx
 
 A simplified file sharing server inspired by [andreimarcu/linx-server](https://github.com/andreimarcu/linx-server).
 

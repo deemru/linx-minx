@@ -1,0 +1,38 @@
+#!/bin/bash
+set -e
+
+if ! id -u linx-minx > /dev/null 2>&1; then
+    useradd -r -s /usr/sbin/nologin -d /var/lib/linx-minx linx-minx
+fi
+
+mkdir -p /var/lib/linx-minx/files
+chown -R linx-minx:linx-minx /var/lib/linx-minx
+chmod 755 /var/lib/linx-minx
+chmod 755 /var/lib/linx-minx/files
+
+if [ ! -f /etc/systemd/system/linx-minx.service ]; then
+    cat > /etc/systemd/system/linx-minx.service << EOF
+[Unit]
+Description=Linx-Minx - File Sharing Server
+After=network.target
+
+[Service]
+Type=simple
+User=linx-minx
+WorkingDirectory=/var/lib/linx-minx
+ExecStart=/usr/bin/linx-minx
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+EOF
+fi
+
+systemctl daemon-reload
+systemctl enable linx-minx.service
+systemctl start linx-minx.service
+
+exit 0

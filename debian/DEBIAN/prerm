@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+
+if systemctl is-active --quiet linx-minx.service; then
+    systemctl stop linx-minx.service
+fi
+
+if systemctl is-enabled --quiet linx-minx.service; then
+    systemctl disable linx-minx.service
+fi
+
+exit 0

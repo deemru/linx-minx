@@ -1,0 +1,10 @@
+Package: linx-minx
+Version: 1.0.0
+Section: net
+Priority: optional
+Architecture: amd64
+Depends: systemd
+Maintainer: Dmitrii Pichulin <deem@deem.ru>
+Description: Simple file sharing server
+ Linx-minx is a lightweight file sharing server written in Go.
+ Features drag & drop upload, automatic expiry and cleanup.
