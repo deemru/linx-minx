@@ -7,11 +7,11 @@
     <div class="cp-content-block">
         <div class="file-display-container">
             <p class="file-display-name">
-                <a id="download-link" href="{{.sitepath}}{{.download}}">{{.filename}}</a>
+                <a href="{{.sitepath}}{{.view}}">{{.filename}}</a>
             </p>
             <p class="file-display-size">{{.size}}</p>
             <div class="file-display-actions">
-                <a href="{{.sitepath}}{{.download}}" class="download-btn">Download</a>
+                <a id="download-link" href="{{.sitepath}}{{.download}}" class="download-btn">Download</a>
                 <button class="copy-btn">Copy Link</button>
             </div>
             {{if ne .expiry "never expires"}}

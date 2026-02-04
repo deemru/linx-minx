@@ -111,10 +111,12 @@ func (h *DisplayHandler) DisplayHandler(w http.ResponseWriter, r *http.Request, 
 
 	siteURL := helpers.GetSiteURL(r)
 	downloadURL := "d/" + randomKey + "/" + parsed.OriginalName
+	viewURL := "v/" + randomKey + "/" + parsed.OriginalName
 
 	context := map[string]interface{}{
 		"filename": parsed.OriginalName,
 		"download": downloadURL,
+		"view":     viewURL,
 		"size":     sizeText,
 		"expiry":   expiryText,
 		"siteurl":  strings.TrimSuffix(siteURL, "/"),

@@ -2,8 +2,10 @@ package handlers
 
 import (
 	"io"
+	"mime"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strconv"
 
 	"linx-minx/helpers/expiry"
@@ -31,7 +33,7 @@ func (h *DownloadHandler) render404(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *DownloadHandler) DownloadHandler(w http.ResponseWriter, r *http.Request, randomKey, filename string) {
+func (h *DownloadHandler) DownloadHandler(w http.ResponseWriter, r *http.Request, randomKey, filename string, asView bool) {
 	pattern := randomKey + ".*"
 	fullFilename, err := h.backend.FindByPattern(pattern)
 	if err != nil {
@@ -72,10 +74,20 @@ func (h *DownloadHandler) DownloadHandler(w http.ResponseWriter, r *http.Request
 	}
 	size := fileInfo.Size()
 
-	w.Header().Set("Content-Type", "application/octet-stream")
 	w.Header().Set("Content-Length", strconv.FormatInt(size, 10))
 	w.Header().Set("Cache-Control", "public, no-cache")
-	w.Header().Set("Content-Disposition", `attachment; filename="`+parsed.OriginalName+`"`)
+	if asView {
+		ext := filepath.Ext(parsed.OriginalName)
+		contentType := mime.TypeByExtension(ext)
+		if contentType == "" {
+			contentType = "application/octet-stream"
+		}
+		w.Header().Set("Content-Type", contentType)
+		w.Header().Set("Content-Disposition", "inline")
+	} else {
+		w.Header().Set("Content-Type", "application/octet-stream")
+		w.Header().Set("Content-Disposition", `attachment; filename="`+parsed.OriginalName+`"`)
+	}
 
 	if r.Method == http.MethodHead {
 		return

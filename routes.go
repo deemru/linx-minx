@@ -57,7 +57,20 @@ func setupRoutes() http.Handler {
 		if len(matches) == 3 {
 			randomKey := matches[1]
 			filename := matches[2]
-			downloadHandler.DownloadHandler(w, r, randomKey, filename)
+			downloadHandler.DownloadHandler(w, r, randomKey, filename, false)
+		} else {
+			pagesHandlers.NotFoundHandler(w, r)
+		}
+	})
+
+	// Format: /v/{randomKey}/{filename} — view in browser (inline)
+	vPattern := regexp.MustCompile("^/v/([" + allowedChars + "]+)/([" + allowedChars + "]+)$")
+	mux.HandleFunc("/v/", func(w http.ResponseWriter, r *http.Request) {
+		matches := vPattern.FindStringSubmatch(r.URL.Path)
+		if len(matches) == 3 {
+			randomKey := matches[1]
+			filename := matches[2]
+			downloadHandler.DownloadHandler(w, r, randomKey, filename, true)
 		} else {
 			pagesHandlers.NotFoundHandler(w, r)
 		}
