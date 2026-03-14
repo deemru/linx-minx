@@ -1,0 +1,40 @@
+name: E2E Tests
+on: [push, pull_request]
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - name: Build server
+        run: |
+          sed -i 's/0.0.0.0:8080/127.0.0.1:8090/' config.go
+          go build -o linx-minx .
+
+      - name: Start server
+        run: |
+          ./linx-minx &
+          sleep 2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - run: npm ci
+
+      - run: npx playwright install chromium --with-deps
+
+      - run: npx playwright test
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            test-results/
+            playwright-report/
