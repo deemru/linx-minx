@@ -92,21 +92,9 @@ var engine = UploadEngine.init({
         file.fileLabelLink = fileLabelLink;
         file.fileLabel.appendChild(fileLabelLink);
 
-        var fileSize = parseInt(resp.size);
-        var sizeText = "";
-        if (fileSize < 1024) {
-            sizeText = fileSize + " B";
-        } else if (fileSize < 1024 * 1024) {
-            sizeText = (fileSize / 1024).toFixed(1) + " KiB";
-        } else if (fileSize < 1024 * 1024 * 1024) {
-            sizeText = (fileSize / (1024 * 1024)).toFixed(1) + " MiB";
-        } else {
-            sizeText = (fileSize / (1024 * 1024 * 1024)).toFixed(1) + " GiB";
-        }
-
         var sizeSpan = document.createElement("span");
         sizeSpan.className = "file-size";
-        sizeSpan.innerHTML = " (" + sizeText + ")";
+        sizeSpan.innerHTML = " (" + formatBytes(resp.size) + ")";
         file.fileLabel.appendChild(sizeSpan);
 
         var files = JSON.parse(localStorage.getItem("linx-minx-files") || "[]");
@@ -115,64 +103,18 @@ var engine = UploadEngine.init({
         files.unshift(resp);
         localStorage.setItem("linx-minx-files", JSON.stringify(files));
 
-        var expiryLabel = document.createElement("span");
-        var expiryTimestamp = parseInt(resp.expiry);
-        if (expiryTimestamp === 0) {
-            expiryLabel.innerHTML = "";
-        } else {
-            var expiryDate = new Date(expiryTimestamp * 1000);
-            var now = new Date();
-            var timeDiff = expiryDate - now;
-
-            if (timeDiff <= 0) {
-                expiryLabel.innerHTML = " (expired)";
-            } else {
-                var daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-                var hoursDiff = Math.floor(timeDiff / (1000 * 60 * 60));
-                var minutesDiff = Math.floor(timeDiff / (1000 * 60));
-
-                if (daysDiff > 0) {
-                    expiryLabel.innerHTML = daysDiff === 1 ? " (1 day)" : " (" + daysDiff + " days)";
-                } else if (hoursDiff > 0) {
-                    expiryLabel.innerHTML = hoursDiff === 1 ? " (1 hour)" : " (" + hoursDiff + " hours)";
-                } else if (minutesDiff > 0) {
-                    expiryLabel.innerHTML = minutesDiff === 1 ? " (1 minute)" : " (" + minutesDiff + " minutes)";
-                } else {
-                    expiryLabel.innerHTML = " (expired)";
-                }
-            }
-        }
-        expiryLabel.className = "expiry";
-        if (expiryLabel.innerHTML.trim() !== "") {
+        var expiryText = formatExpiry(resp.expiry);
+        if (expiryText) {
+            var expiryLabel = document.createElement("span");
+            expiryLabel.className = "expiry";
+            expiryLabel.innerHTML = " " + expiryText;
             file.fileActions.appendChild(expiryLabel);
         }
 
         var deleteAction = document.createElement("span");
         deleteAction.innerHTML = "✕";
         deleteAction.className = "cancel";
-        deleteAction.addEventListener('click', function(ev) {
-            var dxhr = new XMLHttpRequest();
-            dxhr.open("DELETE", resp.furl, true);
-            dxhr.setRequestHeader("dkey", resp.dkey);
-            dxhr.onreadystatechange = function() {
-                if (dxhr.readyState == 4 && (dxhr.status === 200 || dxhr.status === 404)) {
-                    file.uploadElement.className = "upload strikethrough";
-                    file.uploadElement.setAttribute("style", "background-color: #f5f5f5");
-                    file.cancelActionElement.className = "cancel disabled";
-                    file.cancelActionElement.style.pointerEvents = "none";
-                    file.cancelActionElement.style.opacity = "0.5";
-                    var files = JSON.parse(localStorage.getItem("linx-minx-files") || "[]");
-                    files = files.filter(function(f) { return f.furl !== resp.furl; });
-                    localStorage.setItem("linx-minx-files", JSON.stringify(files));
-                    setTimeout(function() {
-                        if (file.uploadElement && file.uploadElement.parentNode) {
-                            file.uploadElement.parentNode.removeChild(file.uploadElement);
-                        }
-                    }, 1000);
-                }
-            };
-            dxhr.send();
-        });
+        deleteAction.addEventListener('click', createDeleteHandler(file.uploadElement, deleteAction, resp));
         file.fileActions.removeChild(file.cancelActionElement);
         file.cancelActionElement = deleteAction;
         file.fileActions.appendChild(deleteAction);

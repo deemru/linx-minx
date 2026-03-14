@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"linx-minx/helpers"
-	"linx-minx/helpers/expiry"
 	"linx-minx/storage"
 )
 
@@ -88,7 +87,7 @@ func (h *DisplayHandler) DisplayHandler(w http.ResponseWriter, r *http.Request, 
 		return
 	}
 
-	if expiry.IsTsExpired(parsed.ExpiryTimestamp) {
+	if helpers.IsTsExpired(parsed.ExpiryTimestamp) {
 		h.render404(w, r)
 		return
 	}

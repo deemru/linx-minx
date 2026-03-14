@@ -5,6 +5,13 @@ import (
 	"time"
 )
 
+func IsTsExpired(expiryTimestamp int64) bool {
+	if expiryTimestamp == 0 {
+		return false
+	}
+	return time.Now().After(time.Unix(expiryTimestamp, 0))
+}
+
 type ExpirationTime struct {
 	Seconds uint64
 	Human   string

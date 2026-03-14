@@ -23,6 +23,7 @@ test('main page: returns 200 with dropzone visible', async ({ page }) => {
 test('static assets: CSS and JS return 200', async ({ request }) => {
   const assets = [
     '/static/css/linx-minx-upload.css',
+    '/static/js/utils.js',
     '/static/js/upload-engine.js',
     '/static/js/upload.js',
     '/static/js/storage.js',

@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strconv"
 
-	"linx-minx/helpers/expiry"
+	"linx-minx/helpers"
 	"linx-minx/storage"
 )
 
@@ -61,7 +61,7 @@ func (h *DownloadHandler) DownloadHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	if expiry.IsTsExpired(parsed.ExpiryTimestamp) {
+	if helpers.IsTsExpired(parsed.ExpiryTimestamp) {
 		h.render404(w, r)
 		return
 	}

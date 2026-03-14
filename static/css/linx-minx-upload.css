@@ -63,8 +63,6 @@
 .expiry-btn:hover {
     background-color: #f5f5f5;
 }
-
-
 .expiry-btn.active {
     background-color: #0055a2;
     color: #fff;
