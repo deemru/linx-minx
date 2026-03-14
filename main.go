@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"log"
 	"net/http"
 	"os"
@@ -13,6 +14,8 @@ import (
 )
 
 func main() {
+	flag.Parse()
+
 	log.Printf("Config: bind=%s, filesDir=%s, sitePath=%s, siteName=%s, maxSize=%d, maxExpiry=%d, cleanupEveryMinutes=%d, keyLength=%d",
 		Config.bind, Config.filesDir, Config.sitePath, Config.siteName, Config.maxSize, Config.maxExpiry, Config.cleanupEveryMinutes, Config.keyLength)
 

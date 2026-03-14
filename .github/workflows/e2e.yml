@@ -12,13 +12,11 @@ jobs:
           go-version: '1.22'
 
       - name: Build server
-        run: |
-          sed -i 's/0.0.0.0:8080/127.0.0.1:8090/' config.go
-          go build -o linx-minx .
+        run: go build -o linx-minx .
 
       - name: Start server
         run: |
-          ./linx-minx &
+          ./linx-minx -bind 127.0.0.1:8090 &
           sleep 2
 
       - uses: actions/setup-node@v4
@@ -27,9 +25,9 @@ jobs:
 
       - run: npm ci
 
-      - run: npx playwright install chromium --with-deps
+      - run: ./node_modules/.bin/playwright install chromium --with-deps
 
-      - run: npx playwright test
+      - run: ./node_modules/.bin/playwright test
 
       - uses: actions/upload-artifact@v4
         if: failure()
