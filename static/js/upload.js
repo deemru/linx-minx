@@ -1,6 +1,9 @@
 var dzone = document.getElementById("dzone");
 dzone.style.display = "block";
 
+var fallback = document.querySelector(".fallback");
+if (fallback) fallback.style.display = "none";
+
 var form = document.getElementById("dropzone");
 var maxBytes = parseInt(form.getAttribute("data-maxsize"), 10) || Infinity;
 var needsAuth = form.getAttribute("data-auth") === "basic";

@@ -1,5 +1,15 @@
 const { test, expect } = require('@playwright/test');
 
+test('fallback: not shown on main page with JS enabled', async ({ page }) => {
+  await page.goto('/');
+
+  const fallback = page.locator('.fallback');
+  await expect(fallback).toBeHidden({ timeout: 5000 });
+
+  // The "outdated browser" message must not be visible
+  await expect(page.locator('text=Your browser is outdated')).toBeHidden();
+});
+
 test('fallback: JS disabled shows .fallback, hides #dzone', async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
