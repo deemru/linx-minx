@@ -44,7 +44,7 @@ Requires Node.js and Chromium (for Playwright E2E tests):
 
 ```bash
 make deps   # install playwright + chromium
-make test   # build, start server, run 47 E2E tests
+make test   # build, start server, run E2E tests
 ```
 
 ## URL Routes
