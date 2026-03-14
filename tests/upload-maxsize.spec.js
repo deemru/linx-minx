@@ -11,15 +11,10 @@ test('max size: file over maxsize shows error, no upload', async ({ page }) => {
 
   await page.goto('/');
 
-  // Get maxsize from form attribute (in bytes)
-  const maxsizeStr = await page.locator('#dropzone').getAttribute('data-maxsize');
-  const maxBytes = parseInt(maxsizeStr, 10);
-
-  // Dropzone converts to MB: Math.round(maxBytes / 1024 / 1024)
-  // So we need a file larger than that in MB. Create a small file but
-  // override Dropzone's maxFilesize to something tiny for testing.
+  // Set maxFilesize to something tiny via engine
+  // The engine reads maxFilesize from config, but we can override via evaluate
   await page.evaluate(() => {
-    Dropzone.forElement('#dropzone').options.maxFilesize = 0.0001; // ~100 bytes
+    engine.maxFilesize = 100; // 100 bytes
   });
 
   await uploadFiles(page, {

@@ -16,10 +16,10 @@ test('auth: HEAD /auth called before upload when data-auth=basic', async ({ page
 
   await page.goto('/');
 
-  // Set auth to basic and reset autoProcessQueue so auth check triggers
+  // Set auth to basic and disable autoProcessQueue so auth check triggers
   await page.evaluate(() => {
     document.getElementById('dropzone').setAttribute('data-auth', 'basic');
-    Dropzone.forElement('#dropzone').options.autoProcessQueue = false;
+    engine.autoProcessQueue = false;
   });
 
   await uploadFiles(page, {
