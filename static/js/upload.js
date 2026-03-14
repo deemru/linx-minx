@@ -198,7 +198,7 @@ function urlRusLat(str) {
         ['@', '@'],['!', '!'],['(', '('],[')', ')'],['#', '_']
     );
 
-    var newStr = new String();
+    var newStr = "";
 
     str = str.replace(/крипт/g,"crypt").replace(/Крипт/g,"Crypt").replace(/КРИПТ/g,"CRYPT");
 
