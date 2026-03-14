@@ -1,3 +1,8 @@
 /files
 /*.exe
 /__debug_bin*
+node_modules/
+test-results/
+playwright-report/
+linx-minx
+package-lock.json
