@@ -1,6 +1,6 @@
 # Linx-Minx
 
-A lightweight file sharing server. Fork of [andreimarcu/linx-server](https://github.com/andreimarcu/linx-server), simplified and modernized.
+A lightweight file sharing server, inspired by [andreimarcu/linx-server](https://github.com/andreimarcu/linx-server).
 
 ## Features
 
@@ -17,7 +17,7 @@ go build -o linx-minx .
 ./linx-minx
 ```
 
-Server runs on `0.0.0.0:8080`. Upload files at `/`.
+Server runs on `0.0.0.0:8080`. Files are stored in `./files/`.
 
 ## CLI Flags
 
@@ -44,7 +44,7 @@ Requires Node.js and Chromium (for Playwright E2E tests):
 
 ```bash
 make deps   # install playwright + chromium
-make test   # build, start server, run 22 E2E tests
+make test   # build, start server, run 47 E2E tests
 ```
 
 ## URL Routes
