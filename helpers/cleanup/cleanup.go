@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"linx-minx/helpers/expiry"
+	"linx-minx/helpers"
 	"linx-minx/storage"
 )
 
@@ -37,7 +37,7 @@ func Cleanup(filesDir string) {
 			continue
 		}
 
-		if expiry.IsTsExpired(expiryTimestamp) {
+		if helpers.IsTsExpired(expiryTimestamp) {
 			backend.Delete(filename)
 		}
 	}
